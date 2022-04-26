@@ -3,6 +3,7 @@ using AP.IdentityServer.Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -77,15 +78,27 @@ namespace AP.IdentityServer.Services
                  .FirstOrDefaultAsync(u => u.UserName == userName);
         }
 
-        public async Task<IEnumerable<UserClaim>> GetUserClaimsBySubjectAsync(string subject)
+        public async Task<IEnumerable<Claim>> GetUserClaimsBySubjectAsync(string subject)
         {
-            //if (string.IsNullOrWhiteSpace(subject))
-            //{
-            //    throw new ArgumentNullException(nameof(subject));
-            //}
+            if (string.IsNullOrWhiteSpace(subject))
+            {
+                throw new ArgumentNullException(nameof(subject));
+            }
+            var userClaim = new List<Claim>();
 
-            //return await _context.UserClaims.Where(u => u.User.Subject == subject).ToListAsync();
-            return null;
+            var userPermission = await _context.UserPermissions
+                                        .Include(up => up.Permission)
+                                        .Where(up => up.UserId == Convert.ToInt32(subject))
+                                        .Select(up => new
+                                        {
+                                            id = up.PermissionId, //Permission Id
+                                            pId = up.Permission.ParentId //ParentId of permission
+                                        })
+                                        .ToListAsync();
+
+            
+            userClaim.Add(new Claim("permission", JsonConvert.SerializeObject(userPermission)));
+            return userClaim;
         }
 
         public async Task<User> GetUserBySubjectAsync(string subject)

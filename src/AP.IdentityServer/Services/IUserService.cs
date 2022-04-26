@@ -13,7 +13,7 @@ namespace AP.IdentityServer.Services
             string userName, 
             string password);
 
-        Task<IEnumerable<UserClaim>> GetUserClaimsBySubjectAsync(
+        Task<IEnumerable<Claim>> GetUserClaimsBySubjectAsync(
             string subject);
 
         Task<User> GetUserByUserNameAsync(

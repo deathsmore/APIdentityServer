@@ -1,5 +1,6 @@
 ﻿using AP.IdentityServer.Domain.Enum;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -29,5 +30,8 @@ namespace AP.IdentityServer.Domain.Entities
         public DateTime LastLoginTime { get; set; } = DateTime.Now;
         public int CustomerId { get; set; }
         public string Subject { get; set; } = "TEST SUBJECT";//T-TEMP
+
+        //Navigation properties
+        public IEnumerable<UserPermission>? UserPermissions { get; set; }
     }
 }

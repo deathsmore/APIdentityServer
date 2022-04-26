@@ -8,7 +8,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace Marvin.IDP.Services
+namespace AP.IdentityServer.Services
 {
     public class UserProfileService : IProfileService
     {
@@ -25,9 +25,8 @@ namespace Marvin.IDP.Services
             var subjectId = context.Subject.GetSubjectId();
             var claimsForUser = (await _localUserService.GetUserClaimsBySubjectAsync(subjectId))
                 .ToList();
-
-            //context.AddRequestedClaims(
-            //    claimsForUser.Select(c => new Claim(c.Type, c.Value)).ToList()); //T-TEMP
+            context.IssuedClaims.AddRange(claimsForUser);
+            //context.AddRequestedClaims(claimsForUser.Select(c => c).ToList());
         }
 
         public async Task IsActiveAsync(IsActiveContext context)

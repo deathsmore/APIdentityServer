@@ -15,6 +15,10 @@ namespace NewCore.IDP
             {
                 new IdentityResources.OpenId(),
                 new IdentityResources.Profile(),
+                new IdentityResource(
+                    "permission",
+                    "Your permission(s)",
+                    new List<string>() { "permission" }),
             };
 
         public static IEnumerable<ApiScope> ApiScopes =>
@@ -57,6 +61,7 @@ namespace NewCore.IDP
                     {
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
+                        "permission",
                         "DVG.AutoPortal.CMS.CarInfo"
                     },
                     ClientSecrets =
