@@ -69,28 +69,7 @@ namespace NewCore.IDP
                         new Secret("DVG.AutoPortal.CMS.Spa".Sha256())
                     },
                     AccessTokenLifetime = 600
-
                 }
-                //new Client()
-                //{
-                //    ClientName = "Image Gallery",
-                //    ClientId =  "imagegalleryclient",
-                //    AllowedGrantTypes = GrantTypes.Code,
-                //    RedirectUris = new List<string>()
-                //    {
-                //        "https://localhost:44389/signin-oidc"
-                //    },
-                //    AllowedScopes =
-                //    {
-                //        IdentityServerConstants.StandardScopes.OpenId,
-                //        IdentityServerConstants.StandardScopes.Profile
-                //    },
-                //    ClientSecrets =
-                //    {
-                //        new Secret("secret".Sha256())
-                //    }
-
-                //}
             };
     }
 }

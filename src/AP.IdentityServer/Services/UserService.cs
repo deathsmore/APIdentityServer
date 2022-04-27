@@ -1,5 +1,6 @@
 ﻿using AP.IdentityServer.Domain.DbContexts;
 using AP.IdentityServer.Domain.Entities;
+using AP.IdentityServer.Extensions;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
@@ -63,7 +64,8 @@ namespace AP.IdentityServer.Services
             }
 
             // Validate credentials
-            return (user.Password == password);
+            var passEncrypt = CryptorEngine.EncryptPassword(password);
+            return (user.Password == passEncrypt);
         }
 
         
@@ -108,7 +110,7 @@ namespace AP.IdentityServer.Services
                 throw new ArgumentNullException(nameof(subject));
             }
 
-            return await _context.Users.FirstOrDefaultAsync(u => u.Subject == subject);
+            return await _context.Users.FirstOrDefaultAsync(u => u.UserId == Convert.ToInt32(subject));
         }
     }
 }

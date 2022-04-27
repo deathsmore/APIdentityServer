@@ -8,6 +8,7 @@ using IdentityServerHost.Quickstart.UI;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -16,10 +17,11 @@ namespace NewCore.IDP
     public class Startup
     {
         public IWebHostEnvironment Environment { get; }
-
-        public Startup(IWebHostEnvironment environment)
+        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
             Environment = environment;
+            Configuration = configuration;
         }
 
         public void ConfigureServices(IServiceCollection services)
@@ -27,7 +29,7 @@ namespace NewCore.IDP
             // uncomment, if you want to add an MVC-based UI
             services.AddControllersWithViews();
 
-            var connectionString = "Server=172.16.0.7;Port=5432;User Id=team_cms_admin;Password=2yGyoG58iWx1a7qLdLJv;Database=autoportal_common_oto;";//T-TEMP
+            var connectionString = Configuration.GetConnectionString("UserDb"); 
             services.AddDbContext<IdentityDbContext>(option =>
                 option.UseNpgsql(connectionString));
 

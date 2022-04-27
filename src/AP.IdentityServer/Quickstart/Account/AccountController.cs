@@ -111,7 +111,7 @@ namespace IdentityServerHost.Quickstart.UI
                 if (await _userService.ValidateClearTextCredentialsAsync(model.Username, model.Password))
                 {
                     var user = await _userService.GetUserByUserNameAsync(model.Username);
-                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.Subject, user.UserName, clientId: context?.Client.ClientId));
+                    await _events.RaiseAsync(new UserLoginSuccessEvent(user.UserName, user.UserId.ToString(), user.UserName, clientId: context?.Client.ClientId));
 
                     // only set explicit expiration here if user chooses "remember me". 
                     // otherwise we rely upon expiration configured in cookie middleware.
@@ -126,7 +126,7 @@ namespace IdentityServerHost.Quickstart.UI
                     };
 
                     // issue authentication cookie with subject ID and username
-                    var isuser = new IdentityServerUser(user.Subject)
+                    var isuser = new IdentityServerUser(user.UserId.ToString())
                     {
                         DisplayName = user.UserName
                     };

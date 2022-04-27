@@ -2,7 +2,9 @@
 // Licensed under the Apache License, Version 2.0. See LICENSE in the project root for license information.
 
 
+using AP.IdentityServer.Configurations;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -22,20 +24,16 @@ namespace NewCore.IDP
                 .MinimumLevel.Override("System", LogEventLevel.Warning)
                 .MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
                 .Enrich.FromLogContext()
-                // uncomment to write to Azure diagnostics stream
-                //.WriteTo.File(
-                //    @"D:\home\LogFiles\Application\identityserver.txt",
-                //    fileSizeLimitBytes: 1_000_000,
-                //    rollOnFileSizeLimit: true,
-                //    shared: true,
-                //    flushToDiskInterval: TimeSpan.FromSeconds(1))
                 .WriteTo.Console(outputTemplate: "[{Timestamp:HH:mm:ss} {Level}] {SourceContext}{NewLine}{Message:lj}{NewLine}{Exception}{NewLine}", theme: AnsiConsoleTheme.Code)
                 .CreateLogger();
 
             try
             {
+                var env = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
+                var configuration = ConfigurationStatic.GetConfiguration(env);
+
                 Log.Information("Starting host...");
-                CreateHostBuilder(args).Build().Run();
+                CreateHostBuilder(configuration, args).Build().Run();
                 return 0;
             }
             catch (Exception ex)
@@ -49,8 +47,9 @@ namespace NewCore.IDP
             }
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        public static IHostBuilder CreateHostBuilder(IConfiguration configuration, string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(x => x.AddConfiguration(configuration))
                 .UseSerilog()
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
