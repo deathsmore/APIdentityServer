@@ -5,6 +5,7 @@
 using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace NewCore.IDP
 {
@@ -24,7 +25,9 @@ namespace NewCore.IDP
         public static IEnumerable<ApiScope> ApiScopes =>
             new ApiScope[]
             {
-                new ApiScope("DVG.AutoPortal.CMS.CarInfo", "DVG AutoPortal CMS CarInfo")
+                new ApiScope("DVG.AutoPortal.CMS.CarInfo", "DVG AutoPortal CMS CarInfo"),
+                new ApiScope("DVG.AutoPortal.CMS.Common", "DVG AutoPortal CMS Common"),
+                new ApiScope("DVG.AutoPortal.CMS.Promotion", "DVG AutoPortal CMS Promotion")
             };
 
         public static IEnumerable<ApiResource> ApiResources =>
@@ -33,6 +36,14 @@ namespace NewCore.IDP
                 new ApiResource("DVG.AutoPortal.CMS.CarInfo", "DVG AutoPortal CMS CarInfo")
                 {
                     Scopes = { "DVG.AutoPortal.CMS.CarInfo" }
+                },
+                new ApiResource("DVG.AutoPortal.CMS.Common", "DVG AutoPortal CMS Common")
+                {
+                    Scopes = { "DVG.AutoPortal.CMS.Common" }
+                },
+                new ApiResource("DVG.AutoPortal.CMS.Promotion", "DVG AutoPortal CMS Promotion")
+                {
+                    Scopes = { "DVG.AutoPortal.CMS.Promotion" }
                 }
             };
         public static IEnumerable<Client> Clients =>
@@ -62,7 +73,9 @@ namespace NewCore.IDP
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "permission",
-                        "DVG.AutoPortal.CMS.CarInfo"
+                        "DVG.AutoPortal.CMS.CarInfo",
+                        "DVG.AutoPortal.CMS.Common",
+                        "DVG.AutoPortal.CMS.Promotion"
                     },
                     ClientSecrets =
                     {
